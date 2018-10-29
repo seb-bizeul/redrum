@@ -11,6 +11,8 @@
     "uuid": "^3.3.2"
   },
   "devDependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
     "babel-tape-runner": "^3.0.0",
     "tape": "^4.9.1"
   }
