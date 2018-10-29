@@ -1,6 +1,6 @@
 {
   "name": "@sbizeul/redrum",
-  "description": "REDRUM is a naive implementation of Redux with less than 50 lines of code",
+  "description": "REDЯUM is a naive implementation of Redux with less than 50 lines of code",
   "version": "0.0.0",
   "main": "redrum.js",
   "license": "MIT",
