@@ -5,7 +5,7 @@ const INIT = '@@redrum/__INIT__'
 const _notify = (subscribers, state) => subscribers.forEach(f => f(state))
 
 const _dispatch = store => action => {
-  store.reducers.forEach((reducer, name) => {
+  Object.entries(store.reducers).forEach(([name, reducer]) => {
     store.state[name] = reducer(store.state[name], action)
   })
   if (action.type === INIT && action.payload != null) {
@@ -22,14 +22,7 @@ const _subscribe = subscribers => f => {
 
 const _init = initialState => ({ type: INIT, payload: initialState })
 
-export const combineReducers = map => {
-  return Object.entries(map).reduce((acc, [name, fn]) => {
-    acc.set(name, fn)
-    return acc
-  }, new Map())
-}
-
-export const createStore = (rootReducer, initialState = {}) => {
+export default function redrum(rootReducer, initialState = {}) {
   const store = {
     reducers: rootReducer,
     subscribers: new Map(),
