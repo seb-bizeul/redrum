@@ -36,7 +36,7 @@ const user = {
   }
 }
 
-test('combineReducers', t => {
+test('combineReducers creates a Map of reducers', t => {
   const rootReducer = combineReducers({
     counter: counter.reducer,
     user: user.reducer
@@ -48,14 +48,45 @@ test('combineReducers', t => {
   t.end()
 })
 
-test('store getState', t => {
+test('createStore uses combineReducers if the root reducer is not an instance of Map', t => {
+  const rootReducer = {
+    counter: counter.reducer,
+    user: user.reducer
+  }
+  const store = createStore(rootReducer)
+  const expected = {
+    counter: counter.initialState,
+    user: user.initialState,
+  }
+  t.deepEqual(store.getState(), expected)
+  t.end()
+})
+
+test('initialState is merged with the first computed state', t => {
+  const rootReducer = {
+    counter: counter.reducer,
+    user: user.reducer
+  }
+  const initialState = {
+    counter: { count: 10 }
+  }
+  const store = createStore(rootReducer, initialState)
+  const expected = {
+    counter: initialState.counter,
+    user: user.initialState,
+  }
+  t.deepEqual(store.getState(), expected)
+  t.end()
+})
+
+test('getState returns store state', t => {
   const rootReducer = combineReducers({ counter: counter.reducer })
   const store = createStore(rootReducer)
   t.deepEqual(store.getState(), { counter: counter.initialState })
   t.end()
 })
 
-test('store dispatch', t => {
+test('action are dispatched into the store', t => {
   const rootReducer = combineReducers({ counter: counter.reducer })
   const store = createStore(rootReducer)
   store.dispatch(counter.actions.increment())
