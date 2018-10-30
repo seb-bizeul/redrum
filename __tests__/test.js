@@ -1,6 +1,6 @@
 import test from 'tape'
 
-import { createStore, combineReducers } from '../src/index'
+import redrum from '../src/index'
 
 const counter = {
   initialState: { count: 0 },
@@ -36,36 +36,28 @@ const user = {
   }
 }
 
-test('combineReducers', t => {
-  const rootReducer = combineReducers({
-    counter: counter.reducer,
-    user: user.reducer
-  })
-  const reducers = new Map()
-  reducers.set('counter', counter.reducer)
-  reducers.set('user', user.reducer)
-  t.deepEqual(rootReducer, reducers)
-  t.end()
-})
-
 test('store getState', t => {
-  const rootReducer = combineReducers({ counter: counter.reducer })
-  const store = createStore(rootReducer)
+  const store = redrum({ counter: counter.reducer })
   t.deepEqual(store.getState(), { counter: counter.initialState })
   t.end()
 })
 
+test('initial state is merged with the first computed one', t => {
+  const initialState = { counter: { count: 10 } }
+  const store = redrum({ counter: counter.reducer }, initialState)
+  t.deepEqual(store.getState(), { counter: initialState.counter })
+  t.end()
+})
+
 test('store dispatch', t => {
-  const rootReducer = combineReducers({ counter: counter.reducer })
-  const store = createStore(rootReducer)
+  const store = redrum({ counter: counter.reducer })
   store.dispatch(counter.actions.increment())
   t.deepEqual(store.getState(), { counter: { count: 1 } })
   t.end()
 })
 
 test('store subscribe', t => {
-  const rootReducer = combineReducers({ counter: counter.reducer })
-  const store = createStore(rootReducer)
+  const store = redrum({ counter: counter.reducer })
   store.subscribe(state => {
     t.deepEqual(state, { counter: { count: 1 } })
     t.end()
