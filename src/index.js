@@ -31,7 +31,7 @@ export const combineReducers = map => {
 
 export const createStore = (rootReducer, initialState = {}) => {
   const store = {
-    reducers: rootReducer,
+    reducers: rootReducer instanceof Map ? rootReducer : combineReducers(rootReducer),
     subscribers: new Map(),
     state: {}
   }
